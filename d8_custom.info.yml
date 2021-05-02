@@ -1,0 +1,6 @@
+name: 'd8 custom'
+description: 'd8 custom module integration'
+package: custom
+core_version_requirement: 8.x
+type: module
+dependencies: {  }

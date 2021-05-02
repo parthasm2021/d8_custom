@@ -1,0 +1,40 @@
+<?php
+/**
+* form_alter implementation
+*/
+d8_custom_form_alter(&$form, \Drupal\Core\Form\FormStateInterface $form_state, $form_id){
+	
+
+   $user = \Drupal::currentUser();
+   $roles = $user->getRoles();
+   if (in_array('administrator', $roles)) {
+      if($form_id == "system_site_information_settings"){
+		    $siteapikey_system_var = '';
+		    $siteapikey_system_var = $form_state->getValue['site_api_key'];
+			
+			$form['site_api_key'] = [
+			  '#type' => 'textfield',
+			  '#title' => $this->t('Site API Key'),
+			  '#description' => $this->t('Site API Key'),
+			  '#default_value' => t('No API Key yet'),
+			];
+			if($siteapikey_system_var != ''){
+				$form_state->setValue['site_api_key'] = $siteapikey_system_var;
+			}
+			$form['save_configuration']['#title'] = t('Update Configuration');
+		    $form['actions'][$action]['#submit'][] = 'd8_custom_form_submit';
+	  }
+   }
+}
+/**
+* custom form submit handler
+*/
+function d8_custom_form_submit(array $form, \Drupal\Core\Form\FormStateInterface $form_state){
+	$siteapikey_system_var = $form_state->getValue['site_api_key'];
+	\Drupal::config('d8_custom.settings')
+      ->set('siteapikey', $siteapikey_system_var)
+      ->save();
+	
+    drupal_set_message(t('Site API Key has been set'));
+  \Drupal::service('messenger')->addMessage("Why won't this message show?");
+}
