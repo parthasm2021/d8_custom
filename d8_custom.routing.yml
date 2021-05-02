@@ -1,0 +1,7 @@
+d8_custom.content:
+  path: '/page_json/FOOBAR12345/17'
+  defaults:
+    _controller: 'Drupal\d8_custom\Controller\contentController::content'
+    _title: 'Content Details'
+  requirements:
+    _permission: 'access content'
